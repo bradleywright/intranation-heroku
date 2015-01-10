@@ -5,9 +5,25 @@ import (
 	"os"
 )
 
+type fileServeHandler struct {
+	path string
+}
+
+func (fsh *fileServeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, fsh.path)
+}
+
+func FileServeHandler(path string) http.Handler {
+	return &fileServeHandler{path}
+}
+
 func main() {
 	mux := http.NewServeMux()
 
+	// static files
+	mux.Handle("/about/", FileServeHandler("static/about.html"))
+
+	// redirects, now hosted at Tumblr
 	mux.Handle("/feeds/feedburner.atom", http.RedirectHandler("http://tumblr.intranation.com/rss", http.StatusMovedPermanently))
 	mux.Handle("/feeds/latest.atom", http.RedirectHandler("http://tumblr.intranation.com/rss", http.StatusMovedPermanently))
 	mux.Handle("/entries/2010/03/why-i-dont-use-virtualbox/", http.RedirectHandler("http://tumblr.intranation.com/post/766290952/why-i-dont-use-virtualbox permanent", http.StatusMovedPermanently))
