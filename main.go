@@ -17,9 +17,17 @@ func FileServeHandler(path string) http.Handler {
 	return &fileServeHandler{path}
 }
 
+func HomePageHandler(w http.ResponseWriter, r *http.Request) {
+	if r.URL.Path == "/" {
+		http.ServeFile(w, r, "static/index.html")
+	} else {
+		http.NotFound(w, r)
+	}
+}
+
 func main() {
 	// static files
-	http.Handle("/", FileServeHandler("static/index.html"))
+	http.HandleFunc("/", HomePageHandler)
 	http.Handle("/about/", FileServeHandler("static/about.html"))
 	http.Handle("/entries/2010/07/moving-homes/", FileServeHandler("static/moving-homes.html"))
 
