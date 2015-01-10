@@ -23,6 +23,7 @@ func main() {
 	// static files
 	mux.Handle("/", FileServeHandler("static/index.html"))
 	mux.Handle("/about/", FileServeHandler("static/about.html"))
+	mux.Handle("/entries/2010/07/moving-homes/", FileServeHandler("static/moving-homes.html"))
 
 	// redirects, now hosted at Tumblr
 	mux.Handle("/feeds/feedburner.atom", http.RedirectHandler("http://tumblr.intranation.com/rss", http.StatusMovedPermanently))
