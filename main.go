@@ -21,6 +21,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// static files
+	mux.Handle("/", FileServeHandler("static/index.html"))
 	mux.Handle("/about/", FileServeHandler("static/about.html"))
 
 	// redirects, now hosted at Tumblr
