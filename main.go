@@ -18,6 +18,16 @@ func FileServeHandler(path string) http.Handler {
 	return &fileServeHandler{path}
 }
 
+// homePageHandler works around a limitation in ServeMux's pattern
+// implementation:
+//
+//     Note that since a pattern ending in a slash names a rooted subtree, the
+//     pattern "/" matches all paths not matched by other registered patterns,
+//     not just the URL with Path == "/".
+//
+// Therefore anchor this handler specifically to "/", and not act as a rooted
+// subtree. If we don't do this, paths like "/thisdoesntexist" would serve the
+// homepage.
 func homePageHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path == "/" {
 		http.ServeFile(w, r, "static/index.html")
